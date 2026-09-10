@@ -782,7 +782,7 @@
 
         <p class="lead-text">Can I tell you something from my heart?</p>
 
-        <div class="quote-box">
+       <div class="quote-box">
           <p>"Sometimes the heart knows what the mind takes time to understand."</p>
         </div>
 
@@ -999,7 +999,8 @@
         }, 400);
       }
     }
-// Floating Ambient Hearts
+    
+    // Floating Ambient Hearts
     const bgContainer = document.getElementById('ambientHearts');
     const heartSymbols = ['♥', '💖', '💕', '💗', '♡'];
     for (let i = 0; i < 30; i++) {
@@ -1096,6 +1097,56 @@
         };
       }
 
+      // YAHAN PAR CODE GAYAB THA JO MAINE WAPAS JOD DIYA HAI
+      for (let i = 0; i < 100; i++) particles.push(createParticle());
+
+      const interval = setInterval(() => {
+        for (let i = 0; i < 8; i++) {
+          particles.push(createParticle(Math.random() * canvas.width, Math.random() * canvas.height * 0.7));
+        }
+      }, 150);
+
+      setTimeout(() => clearInterval(interval), 7000);
+
+      function drawHeart(x, y, size, color, opacity, rot) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rot);
+        ctx.globalAlpha = opacity;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        const topCurveHeight = size * 0.3;
+        ctx.moveTo(0, topCurveHeight);
+        ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
+        ctx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, size, 0, size);
+        ctx.bezierCurveTo(0, size, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
+        ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.x += p.speedX;
+          p.y += p.speedY;
+          p.speedY += 0.2;
+          p.rotation += p.rotSpeed;
+          p.opacity -= p.decay;
+
+          drawHeart(p.x, p.y, p.size, p.color, Math.max(0, p.opacity), p.rotation);
+
+          if (p.opacity <= 0 || p.y > canvas.height + 50) {
+            particles.splice(i, 1);
+          }
+        }
+        requestAnimationFrame(render);
+      }
+      render();
+    }
+
     // Magical Touch Pop Heart Effect
     document.addEventListener('pointerdown', function(e) {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
@@ -1165,5 +1216,5 @@
     }
   </script>
 </body>
-</html>
-
+  </html>
+  
